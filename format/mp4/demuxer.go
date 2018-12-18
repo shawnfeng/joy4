@@ -1,17 +1,17 @@
 package mp4
 
 import (
-	"time"
 	"fmt"
 	"github.com/nareix/joy4/av"
 	"github.com/nareix/joy4/codec/aacparser"
 	"github.com/nareix/joy4/codec/h264parser"
 	"github.com/nareix/joy4/format/mp4/mp4io"
 	"io"
+	"time"
 )
 
 type Demuxer struct {
-	r io.ReadSeeker
+	r         io.ReadSeeker
 	streams   []*Stream
 	movieAtom *mp4io.Movie
 }
@@ -124,7 +124,7 @@ func (self *Stream) setSampleIndex(index int) (err error) {
 	}
 
 	if self.sample.SampleSize.SampleSize != 0 {
-		self.sampleOffsetInChunk = int64(self.sampleIndexInChunk)*int64(self.sample.SampleSize.SampleSize)
+		self.sampleOffsetInChunk = int64(self.sampleIndexInChunk) * int64(self.sample.SampleSize.SampleSize)
 	} else {
 		if index >= len(self.sample.SampleSize.Entries) {
 			err = fmt.Errorf("mp4: stream[%d]: sample index out of range", self.idx)
@@ -145,12 +145,12 @@ func (self *Stream) setSampleIndex(index int) (err error) {
 		n := int(entry.Count)
 		if index >= start && index < start+n {
 			self.sampleIndexInSttsEntry = index - start
-			self.dts += int64(index-start)*int64(entry.Duration)
+			self.dts += int64(index-start) * int64(entry.Duration)
 			found = true
 			break
 		}
 		start += n
-		self.dts += int64(n)*int64(entry.Duration)
+		self.dts += int64(n) * int64(entry.Duration)
 		self.sttsEntryIndex++
 	}
 	if !found {
@@ -430,7 +430,7 @@ func (self *Stream) timeToSampleIndex(tm time.Duration) int {
 		entries := self.sample.SyncSample.Entries
 		for i := len(entries) - 1; i >= 0; i-- {
 			if entries[i]-1 < uint32(targetIndex) {
-				targetIndex = int(entries[i]-1)
+				targetIndex = int(entries[i] - 1)
 				break
 			}
 		}
