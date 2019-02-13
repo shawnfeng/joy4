@@ -1,8 +1,6 @@
 package ffmpeg
 
 /*
-#cgo CFLAGS: -I /data/home/chenxl/ffmpeg_build/include
-#cgo LDFLAGS: -L /data/home/chenxl/ffmpeg_build/lib -lm -lavformat -lavcodec -lswscale -lavutil -lavfilter -lswresample -lavdevice -lpostproc -lz -lx264 -lbz2 -lva -lrt -lfdk-aac
 #include "ffmpeg.h"
 int wrap_avcodec_decode_audio4(AVCodecContext *ctx, AVFrame *frame, void *data, int size, int *got) {
 	struct AVPacket pkt = {.data = data, .size = size};
@@ -15,9 +13,9 @@ int wrap_avresample_convert(AVAudioResampleContext *avr, int *out, int outsize, 
 import "C"
 import (
 	"fmt"
-	"github.com/nareix/joy4/av"
-	"github.com/nareix/joy4/av/avutil"
-	"github.com/nareix/joy4/codec/aacparser"
+	"github.com/shawnfeng/joy4/av"
+	"github.com/shawnfeng/joy4/av/avutil"
+	"github.com/shawnfeng/joy4/codec/aacparser"
 	"runtime"
 	"time"
 	"unsafe"
