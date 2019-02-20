@@ -590,6 +590,11 @@ func (self *AudioDecoder) Setup() (err error) {
 func (self *AudioDecoder) Decode(pkt []byte) (gotframe bool, frame av.AudioFrame, err error) {
 	ff := &self.ff.ff
 
+	if len(pkt) == 0 {
+		err = fmt.Errorf("ffmpeg: len(pkt) == 0")
+		return
+	}
+
 	cgotframe := C.int(0)
 	cerr := C.wrap_avcodec_decode_audio4(ff.codecCtx, ff.frame, unsafe.Pointer(&pkt[0]), C.int(len(pkt)), &cgotframe)
 	if cerr < C.int(0) {
