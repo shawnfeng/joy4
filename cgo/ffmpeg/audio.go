@@ -1,6 +1,8 @@
 package ffmpeg
 
 /*
+#cgo CFLAGS: -I /xbin/ffmpeg_build/include
+#cgo LDFLAGS: -L /xbin/ffmpeg_build/lib -lm -lavformat -lavcodec -lswscale -lavutil -lavfilter -lswresample -lavdevice -lpostproc -lz -lx264 -lbz2 -lva -lrt -lfdk-aac
 #include "ffmpeg.h"
 int wrap_avcodec_decode_audio4(AVCodecContext *ctx, AVFrame *frame, void *data, int size, int *got) {
 	struct AVPacket pkt = {.data = data, .size = size};
@@ -587,6 +589,11 @@ func (self *AudioDecoder) Setup() (err error) {
 
 func (self *AudioDecoder) Decode(pkt []byte) (gotframe bool, frame av.AudioFrame, err error) {
 	ff := &self.ff.ff
+
+	if len(pkt) == 0 {
+		err = fmt.Errorf("ffmpeg: len(pkt) == 0")
+		return
+	}
 
 	cgotframe := C.int(0)
 	cerr := C.wrap_avcodec_decode_audio4(ff.codecCtx, ff.frame, unsafe.Pointer(&pkt[0]), C.int(len(pkt)), &cgotframe)
